@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const faqs = [
   {
@@ -81,7 +82,7 @@ const faqs = [
 
 const FAQSection = () => {
   return (
-    <section className="section-padding">
+    <section className="section-padding" id="faq">
       <div className="container-tight">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
@@ -127,12 +128,12 @@ const FAQSection = () => {
           <p className="text-muted-foreground mb-4">
             Still have questions?
           </p>
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="text-accent hover:underline font-medium"
           >
             Contact our support team →
-          </a>
+          </Link>
         </div>
       </div>
     </section>
