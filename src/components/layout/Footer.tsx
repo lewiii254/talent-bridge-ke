@@ -37,14 +37,14 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/skills" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  Skill Categories
+                <Link to="/dashboard" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  My Dashboard
                 </Link>
               </li>
               <li>
-                <Link to="/resources" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  Career Resources
-                </Link>
+                <a href="/#faq" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  FAQs
+                </a>
               </li>
             </ul>
           </div>
@@ -59,42 +59,46 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/talent" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  Browse Talent
-                </Link>
-              </li>
-              <li>
                 <Link to="/pricing" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
                   Pricing Plans
                 </Link>
               </li>
               <li>
-                <Link to="/enterprise" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  Enterprise
+                <Link to="/dashboard" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  Employer Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  Contact Sales
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Company */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-lg">Contact Us</h4>
+            <h4 className="font-semibold text-lg">Company</h4>
             <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-primary-foreground/70 text-sm">
-                <MapPin className="w-4 h-4 text-accent" />
-                Nairobi, Kenya
+              <li>
+                <Link to="/about" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  About Us
+                </Link>
               </li>
               <li>
-                <a href="mailto:hello@kazihub.com" className="flex items-center gap-3 text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  <Mail className="w-4 h-4 text-accent" />
-                  hello@kazihub.com
-                </a>
+                <Link to="/contact" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  Contact Us
+                </Link>
               </li>
               <li>
-                <a href="tel:+254700000000" className="flex items-center gap-3 text-primary-foreground/70 hover:text-accent transition-colors text-sm">
-                  <Phone className="w-4 h-4 text-accent" />
-                  +254 700 000 000
-                </a>
+                <Link to="/privacy" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-primary-foreground/70 hover:text-accent transition-colors text-sm">
+                  Terms of Service
+                </Link>
               </li>
             </ul>
           </div>
