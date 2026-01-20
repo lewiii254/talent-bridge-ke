@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  // Preview server configuration - ensures consistent SPA routing behavior
   preview: {
     port: 4173,
     host: "::",
