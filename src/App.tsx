@@ -12,6 +12,11 @@ import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import PostJob from "./pages/PostJob";
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +37,11 @@ const App = () => (
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/post-job" element={<PostJob />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

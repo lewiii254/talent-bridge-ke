@@ -25,11 +25,14 @@ const Header = () => {
             <Link to="/jobs" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Find Jobs
             </Link>
-            <Link to="/talent" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-              Find Talent
+            <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+              About
             </Link>
             <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
               Pricing
+            </Link>
+            <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+              Contact
             </Link>
           </nav>
 
@@ -65,11 +68,11 @@ const Header = () => {
                 Find Jobs
               </Link>
               <Link 
-                to="/talent" 
+                to="/about" 
                 className="text-foreground font-medium py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Find Talent
+                About
               </Link>
               <Link 
                 to="/pricing" 
@@ -77,6 +80,13 @@ const Header = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Pricing
+              </Link>
+              <Link 
+                to="/contact" 
+                className="text-foreground font-medium py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact
               </Link>
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Button variant="outline" asChild className="w-full">
