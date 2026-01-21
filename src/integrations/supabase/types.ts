@@ -14,6 +14,55 @@ export type Database = {
   }
   public: {
     Tables: {
+      conversations: {
+        Row: {
+          created_at: string
+          employer_id: string
+          id: string
+          job_id: string | null
+          job_seeker_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          employer_id: string
+          id?: string
+          job_id?: string | null
+          job_seeker_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          employer_id?: string
+          id?: string
+          job_id?: string | null
+          job_seeker_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "employer_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_job_seeker_id_fkey"
+            columns: ["job_seeker_id"]
+            isOneToOne: false
+            referencedRelation: "job_seeker_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employer_profiles: {
         Row: {
           company_logo_url: string | null
@@ -271,6 +320,41 @@ export type Database = {
             columns: ["employer_id"]
             isOneToOne: false
             referencedRelation: "employer_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          is_read: boolean
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
         ]
