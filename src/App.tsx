@@ -17,6 +17,8 @@ import CompanyProfile from "./pages/CompanyProfile";
 import MyApplications from "./pages/MyApplications";
 import MyJobs from "./pages/MyJobs";
 import Applicants from "./pages/Applicants";
+import Messages from "./pages/Messages";
+import Settings from "./pages/Settings";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
@@ -49,6 +51,9 @@ const App = () => (
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/my-jobs/:jobId" element={<MyJobs />} />
             <Route path="/applicants" element={<Applicants />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/messages/:conversationId" element={<Messages />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />

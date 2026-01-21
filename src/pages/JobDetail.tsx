@@ -163,6 +163,46 @@ const JobDetail = () => {
     }
   };
 
+  const startConversation = async () => {
+    if (!profile || !job?.employer?.id) return;
+
+    try {
+      // Check if conversation exists
+      const { data: existing } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("job_seeker_id", profile.id)
+        .eq("employer_id", job.employer.id)
+        .eq("job_id", job.id)
+        .maybeSingle();
+
+      if (existing) {
+        navigate(`/messages/${existing.id}`);
+        return;
+      }
+
+      // Create new conversation
+      const { data: newConv, error } = await supabase
+        .from("conversations")
+        .insert({
+          job_seeker_id: profile.id,
+          employer_id: job.employer.id,
+          job_id: job.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      navigate(`/messages/${newConv.id}`);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const formatBudget = () => {
     if (!job?.budget_min && !job?.budget_max) return null;
 
@@ -348,9 +388,9 @@ const JobDetail = () => {
                     </Link>
                   </div>
                 ) : (
-                  <>
+                  <div className="space-y-3">
                     <Button
-                      className="w-full h-12 mb-3"
+                      className="w-full h-12"
                       onClick={() =>
                         profile ? setApplyDialogOpen(true) : navigate("/login")
                       }
@@ -358,10 +398,20 @@ const JobDetail = () => {
                       <Send className="w-4 h-4 mr-2" />
                       Apply Now
                     </Button>
+                    {profile?.role === "job_seeker" && (
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={startConversation}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Message Employer
+                      </Button>
+                    )}
                     <p className="text-center text-sm text-muted-foreground">
                       Quick apply with your KaziHub profile
                     </p>
-                  </>
+                  </div>
                 )}
               </div>
 

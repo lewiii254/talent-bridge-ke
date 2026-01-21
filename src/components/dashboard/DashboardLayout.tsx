@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
 import {
   Briefcase,
   LayoutDashboard,
@@ -11,10 +10,10 @@ import {
   Settings,
   LogOut,
   Menu,
-  X,
   Plus,
   Users,
   Building2,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +33,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/jobs", label: "Browse Jobs", icon: Search },
     { href: "/applications", label: "My Applications", icon: FileText },
+    { href: "/messages", label: "Messages", icon: MessageCircle },
     { href: "/profile", label: "My Profile", icon: User },
   ];
 
@@ -41,6 +41,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/my-jobs", label: "My Jobs", icon: Briefcase },
     { href: "/applicants", label: "Applicants", icon: Users },
+    { href: "/messages", label: "Messages", icon: MessageCircle },
     { href: "/company-profile", label: "Company Profile", icon: Building2 },
   ];
 
