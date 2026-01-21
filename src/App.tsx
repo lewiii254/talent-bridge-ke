@@ -12,6 +12,11 @@ import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import PostJob from "./pages/PostJob";
+import Profile from "./pages/Profile";
+import CompanyProfile from "./pages/CompanyProfile";
+import MyApplications from "./pages/MyApplications";
+import MyJobs from "./pages/MyJobs";
+import Applicants from "./pages/Applicants";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
@@ -38,6 +43,12 @@ const App = () => (
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/post-job" element={<PostJob />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/company-profile" element={<CompanyProfile />} />
+            <Route path="/applications" element={<MyApplications />} />
+            <Route path="/my-jobs" element={<MyJobs />} />
+            <Route path="/my-jobs/:jobId" element={<MyJobs />} />
+            <Route path="/applicants" element={<Applicants />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
