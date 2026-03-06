@@ -23,10 +23,14 @@ import {
   Loader2,
   MessageCircle,
   Send,
+  Share2,
+  Bookmark,
+  BookmarkCheck,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
+import { useSavedJobs } from "@/hooks/useSavedJobs";
 
 interface Job {
   id: string;
@@ -59,6 +63,7 @@ const JobDetail = () => {
   const navigate = useNavigate();
   const { profile } = useAuth();
   const { toast } = useToast();
+  const { isSaved, toggleSave } = useSavedJobs();
 
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,6 +71,40 @@ const JobDetail = () => {
   const [applyDialogOpen, setApplyDialogOpen] = useState(false);
   const [coverNote, setCoverNote] = useState("");
   const [isApplying, setIsApplying] = useState(false);
+
+  const saved = job ? isSaved(job.id) : false;
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href).then(
+      () => toast({ title: "Link copied!", description: "Job link copied to clipboard." }),
+      () => toast({ title: "Copy failed", description: "Could not copy the link. Please copy it from your browser.", variant: "destructive" })
+    );
+  };
+
+  const handleBookmark = () => {
+    if (!job) return;
+    const wasSaved = toggleSave({
+      id: job.id,
+      title: job.title,
+      company_name: job.employer?.company_name ?? null,
+      job_type: job.job_type,
+      location: job.location,
+      is_remote: job.is_remote,
+      budget_min: job.budget_min,
+      budget_max: job.budget_max,
+      budget_period: job.budget_period,
+      is_verified: job.employer?.is_verified ?? false,
+      skills: job.skills?.map((s) => s.skill) ?? [],
+      description: job.description,
+      created_at: job.created_at,
+    });
+    toast({
+      title: wasSaved ? "Job saved!" : "Job removed",
+      description: wasSaved
+        ? "Added to your saved jobs."
+        : "Removed from your saved jobs.",
+    });
+  };
 
   useEffect(() => {
     if (id) {
@@ -225,11 +264,11 @@ const JobDetail = () => {
   const getJobTypeBadge = () => {
     switch (job?.job_type) {
       case "full_time":
-        return { label: "Full-time", className: "bg-blue-100 text-blue-700" };
+        return { label: "Full-time", className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" };
       case "contract":
-        return { label: "Contract", className: "bg-amber-100 text-amber-700" };
+        return { label: "Contract", className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" };
       case "gig":
-        return { label: "Gig", className: "bg-purple-100 text-purple-700" };
+        return { label: "Gig", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" };
       default:
         return { label: job?.job_type, className: "bg-secondary text-secondary-foreground" };
     }
@@ -268,13 +307,34 @@ const JobDetail = () => {
       <main className="pt-20 pb-16">
         <div className="container-tight py-8">
           {/* Back button */}
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to jobs
-          </button>
+          <div className="flex items-center justify-between mb-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to jobs
+            </button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleBookmark}
+                aria-label={saved ? "Remove from saved" : "Save job"}
+              >
+                {saved ? (
+                  <BookmarkCheck className="w-4 h-4 text-accent mr-1.5" />
+                ) : (
+                  <Bookmark className="w-4 h-4 mr-1.5" />
+                )}
+                {saved ? "Saved" : "Save"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleShare}>
+                <Share2 className="w-4 h-4 mr-1.5" />
+                Share
+              </Button>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}

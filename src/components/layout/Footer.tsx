@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
-import { Briefcase, Mail, Phone, MapPin } from "lucide-react";
+import { Briefcase } from "lucide-react";
+import BackToTop from "@/components/ui/BackToTop";
 
 const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <>
+      <BackToTop />
+      <footer className="bg-primary text-primary-foreground">
       <div className="container-tight section-padding">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -120,6 +123,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 

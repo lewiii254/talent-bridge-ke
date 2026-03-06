@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "next-themes";
 import {
   Briefcase,
   LayoutDashboard,
@@ -14,6 +15,9 @@ import {
   Users,
   Building2,
   MessageCircle,
+  Bookmark,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +29,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { profile, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isJobSeeker = profile?.role === "job_seeker";
@@ -33,6 +38,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/jobs", label: "Browse Jobs", icon: Search },
     { href: "/applications", label: "My Applications", icon: FileText },
+    { href: "/saved-jobs", label: "Saved Jobs", icon: Bookmark },
     { href: "/messages", label: "Messages", icon: MessageCircle },
     { href: "/profile", label: "My Profile", icon: User },
   ];
@@ -118,6 +124,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         {/* Bottom section */}
         <div className="p-4 border-t border-border space-y-1">
+          {/* Dark mode toggle */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label="Toggle dark mode"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors w-full"
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          </button>
           <Link
             to="/settings"
             onClick={() => setSidebarOpen(false)}

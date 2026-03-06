@@ -3,7 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, MapPin, Filter, X, Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Search, MapPin, Loader2, Wifi, SlidersHorizontal, X } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import JobCard from "@/components/jobs/JobCard";
@@ -46,6 +48,8 @@ const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [locationFilter, setLocationFilter] = useState(searchParams.get("location") || "");
   const [jobTypeFilter, setJobTypeFilter] = useState(searchParams.get("type") || "all");
+  const [remoteOnly, setRemoteOnly] = useState(false);
+  const [minSalary, setMinSalary] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -91,15 +95,20 @@ const Jobs = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Update search params
     const params = new URLSearchParams();
     if (searchQuery) params.set("q", searchQuery);
     if (locationFilter) params.set("location", locationFilter);
     if (jobTypeFilter !== "all") params.set("type", jobTypeFilter);
     setSearchParams(params);
+  };
 
-    // Filter jobs client-side for now
-    // In production, you'd want to do this server-side
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setLocationFilter("");
+    setJobTypeFilter("all");
+    setRemoteOnly(false);
+    setMinSalary("");
+    setSearchParams({});
   };
 
   const filteredJobs = jobs.filter((job) => {
@@ -115,8 +124,20 @@ const Jobs = () => {
       job.is_remote ||
       job.location?.toLowerCase().includes(locationFilter.toLowerCase());
 
-    return matchesSearch && matchesLocation;
+    const matchesRemote = !remoteOnly || job.is_remote;
+
+    const matchesSalary =
+      !minSalary ||
+      !isNaN(Number(minSalary)) && (
+        (job.budget_min !== null && job.budget_min >= Number(minSalary)) ||
+        (job.budget_max !== null && job.budget_max >= Number(minSalary))
+      );
+
+    return matchesSearch && matchesLocation && matchesRemote && matchesSalary;
   });
+
+  const hasActiveFilters =
+    searchQuery || locationFilter || jobTypeFilter !== "all" || remoteOnly || minSalary;
 
   return (
     <div className="min-h-screen bg-background">
@@ -165,9 +186,9 @@ const Jobs = () => {
         {/* Results */}
         <div className="container-tight py-8">
           {/* Filters Bar */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-sm text-muted-foreground">
-              {filteredJobs.length} jobs found
+              {filteredJobs.length} job{filteredJobs.length !== 1 ? "s" : ""} found
             </span>
 
             <div className="flex-1" />
@@ -189,7 +210,65 @@ const Jobs = () => {
                 </button>
               ))}
             </div>
+
+            {/* Advanced Filters toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors border",
+                showFilters
+                  ? "bg-accent text-accent-foreground border-accent"
+                  : "bg-background text-muted-foreground border-border hover:border-accent hover:text-foreground"
+              )}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              Filters
+            </button>
           </div>
+
+          {/* Advanced Filters Panel */}
+          {showFilters && (
+            <div className="card-elevated p-4 mb-6 flex flex-wrap items-center gap-6">
+              {/* Remote only toggle */}
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="remote-only"
+                  checked={remoteOnly}
+                  onCheckedChange={setRemoteOnly}
+                />
+                <Label htmlFor="remote-only" className="flex items-center gap-1.5 cursor-pointer text-sm font-medium">
+                  <Wifi className="w-4 h-4 text-accent" />
+                  Remote only
+                </Label>
+              </div>
+
+              {/* Min salary */}
+              <div className="flex items-center gap-2">
+                <Label htmlFor="min-salary" className="text-sm font-medium whitespace-nowrap">
+                  Min. salary (KES)
+                </Label>
+                <Input
+                  id="min-salary"
+                  type="number"
+                  placeholder="e.g. 50000"
+                  value={minSalary}
+                  onChange={(e) => setMinSalary(e.target.value)}
+                  className="w-36 h-9"
+                />
+              </div>
+
+              {/* Clear all */}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearAllFilters}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive transition-colors ml-auto"
+                >
+                  <X className="w-4 h-4" />
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Jobs Grid */}
           {loading ? (
@@ -211,15 +290,7 @@ const Jobs = () => {
               <p className="text-muted-foreground mb-6">
                 Try adjusting your search or filters
               </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchQuery("");
-                  setLocationFilter("");
-                  setJobTypeFilter("all");
-                  setSearchParams({});
-                }}
-              >
+              <Button variant="outline" onClick={clearAllFilters}>
                 Clear filters
               </Button>
             </div>
