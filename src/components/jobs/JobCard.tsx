@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { MapPin, Clock, Banknote, Building2, CheckCircle2, Wifi } from "lucide-react";
+import { MapPin, Clock, Banknote, Building2, CheckCircle2, Wifi, Bookmark, BookmarkCheck } from "lucide-react";
+import { useSavedJobs } from "@/hooks/useSavedJobs";
 
 interface JobCardProps {
   job: {
@@ -27,6 +28,9 @@ interface JobCardProps {
 }
 
 const JobCard = ({ job }: JobCardProps) => {
+  const { isSaved, toggleSave } = useSavedJobs();
+  const saved = isSaved(job.id);
+
   const formatBudget = () => {
     if (!job.budget_min && !job.budget_max) return null;
     
@@ -52,11 +56,11 @@ const JobCard = ({ job }: JobCardProps) => {
   const getJobTypeBadge = () => {
     switch (job.job_type) {
       case "full_time":
-        return { label: "Full-time", className: "bg-blue-100 text-blue-700" };
+        return { label: "Full-time", className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" };
       case "contract":
-        return { label: "Contract", className: "bg-amber-100 text-amber-700" };
+        return { label: "Contract", className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" };
       case "gig":
-        return { label: "Gig", className: "bg-purple-100 text-purple-700" };
+        return { label: "Gig", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" };
       default:
         return { label: job.job_type, className: "bg-secondary text-secondary-foreground" };
     }
@@ -76,15 +80,48 @@ const JobCard = ({ job }: JobCardProps) => {
     return posted.toLocaleDateString();
   };
 
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleSave({
+      id: job.id,
+      title: job.title,
+      company_name: job.employer?.company_name ?? null,
+      job_type: job.job_type,
+      location: job.location,
+      is_remote: job.is_remote,
+      budget_min: job.budget_min,
+      budget_max: job.budget_max,
+      budget_period: job.budget_period,
+      is_verified: job.employer?.is_verified ?? false,
+      skills: job.skills?.map((s) => s.skill) ?? [],
+      description: job.description,
+      created_at: job.created_at,
+    });
+  };
+
   const typeBadge = getJobTypeBadge();
   const budget = formatBudget();
 
   return (
     <Link
       to={`/jobs/${job.id}`}
-      className="group card-elevated p-5 hover:border-accent/50 block transition-all"
+      className="group card-elevated p-5 hover:border-accent/50 block transition-all relative"
     >
-      <div className="flex items-start justify-between gap-4 mb-3">
+      {/* Bookmark button */}
+      <button
+        onClick={handleBookmark}
+        aria-label={saved ? "Remove from saved jobs" : "Save job"}
+        className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors z-10"
+      >
+        {saved ? (
+          <BookmarkCheck className="w-4 h-4 text-accent" />
+        ) : (
+          <Bookmark className="w-4 h-4" />
+        )}
+      </button>
+
+      <div className="flex items-start justify-between gap-4 mb-3 pr-8">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
             <Building2 className="w-6 h-6 text-muted-foreground" />
