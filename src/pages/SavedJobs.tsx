@@ -92,7 +92,11 @@ const SavedJobs = () => {
           <div className="grid gap-4">
             {savedJobs
               .slice()
-              .sort((a, b) => new Date(b.saved_at).getTime() - new Date(a.saved_at).getTime())
+              .sort((a, b) => {
+                const aTime = new Date(a.saved_at).getTime();
+                const bTime = new Date(b.saved_at).getTime();
+                return bTime - aTime;
+              })
               .map((job) => {
                 const typeBadge = getJobTypeBadge(job.job_type);
                 const budget = formatBudget(job);

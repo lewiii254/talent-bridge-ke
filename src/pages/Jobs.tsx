@@ -128,9 +128,10 @@ const Jobs = () => {
 
     const matchesSalary =
       !minSalary ||
-      isNaN(Number(minSalary)) ||
-      (job.budget_min !== null && job.budget_min >= Number(minSalary)) ||
-      (job.budget_max !== null && job.budget_max >= Number(minSalary));
+      !isNaN(Number(minSalary)) && (
+        (job.budget_min !== null && job.budget_min >= Number(minSalary)) ||
+        (job.budget_max !== null && job.budget_max >= Number(minSalary))
+      );
 
     return matchesSearch && matchesLocation && matchesRemote && matchesSalary;
   });

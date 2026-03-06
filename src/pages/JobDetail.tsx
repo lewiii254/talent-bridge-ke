@@ -75,8 +75,10 @@ const JobDetail = () => {
   const saved = job ? isSaved(job.id) : false;
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast({ title: "Link copied!", description: "Job link copied to clipboard." });
+    navigator.clipboard.writeText(window.location.href).then(
+      () => toast({ title: "Link copied!", description: "Job link copied to clipboard." }),
+      () => toast({ title: "Copy failed", description: "Could not copy the link. Please copy it from your browser.", variant: "destructive" })
+    );
   };
 
   const handleBookmark = () => {

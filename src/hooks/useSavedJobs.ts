@@ -31,8 +31,8 @@ export const useSavedJobs = () => {
         setSavedJobs(jobs);
         setSavedJobIds(new Set(jobs.map((j) => j.id)));
       }
-    } catch {
-      // ignore parse errors
+    } catch (err) {
+      console.error("[useSavedJobs] Failed to parse saved jobs from localStorage:", err);
     }
   }, []);
 
